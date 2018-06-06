@@ -16,7 +16,7 @@ namespace FindProject
         public Form1()
         {
             InitializeComponent();
-            var f = new FolderBrowserDialog(); 
+            var f = new FolderBrowserDialog();
         }
 
         private void DotButton_Click(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace FindProject
                     var tmp1 = new ListViewItem(item.Split('\\').Last());
                     MainListView1.Items.Add(tmp1);
                     tmp1.SubItems.Add(SearchFoldersSize(new DirectoryInfo(item)).ToString());
-                    tmp1.SubItems.Add(CountFolders(new DirectoryInfo(item)).ToString());
+                    tmp1.SubItems.Add(CountFolders(new DirectoryInfo(item)).ToString());//
                 }
             }
             catch (Exception)
@@ -59,20 +59,28 @@ namespace FindProject
         }
         private long CountFolders(DirectoryInfo di)                         //fix
         {
-            long count = 0;
-            foreach (var item in di.GetDirectories())
+            try
             {
-                if (item.GetDirectories(PathTextBox1.Text).Length == 0)
-                    return count;
-                else
+                long count = 0;
+                foreach (var item in di.GetDirectories())
                 {
-                    foreach (var item1 in di.GetFiles())
+                    if (item.GetDirectories(PathTextBox1.Text).Length == 0)
+                        return count;
+                    else
                     {
-                        count += item1.Length;
+                        foreach (var item1 in di.GetFiles())
+                        {
+                            count += CountFolders(di);
+                        }
                     }
                 }
+                return count;
             }
-            return count;
+            catch (Exception)
+            {
+                return 0;
+
+            }
         }
     }
 }
