@@ -57,7 +57,7 @@ namespace FindProject
             }
             return size;
         }
-        private long CountFolders(DirectoryInfo di)
+        private long CountFolders(DirectoryInfo di)                         //fix
         {
             long count = 0;
             foreach (var item in di.GetDirectories())
